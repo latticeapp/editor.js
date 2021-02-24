@@ -183,7 +183,7 @@ export default class ModificationsObserver extends Module {
       this.setObserver();
       this.updateNativeInputs();
       this.enable();
-    }, 1000);
+    }, 100);
   }
 
   /**
