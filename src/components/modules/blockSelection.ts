@@ -374,6 +374,11 @@ export default class BlockSelection extends Module {
    * @param {KeyboardEvent} event - keyboard event
    */
   private handleCommandA(event: KeyboardEvent): void {
+    /** don't handle CTRL+A on macs, only handle CMD+A */
+    if (window.navigator.platform.toLowerCase().includes('mac') && event.ctrlKey && !event.metaKey) {
+      return;
+    }
+
     this.Editor.RectangleSelection.clearSelection();
 
     /** allow default selection on native inputs */
