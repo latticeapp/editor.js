@@ -97,7 +97,7 @@ export default class Core {
            * Resolve this.isReady promise
            */
           onReady();
-        }, 500);
+        }, 1);
       })
       .catch((error) => {
         _.log(`Editor.js is not ready because of ${error}`, 'error');

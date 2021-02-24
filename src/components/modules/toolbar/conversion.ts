@@ -145,7 +145,7 @@ export default class ConversionToolbar extends Module<ConversionToolbarNodes> {
       if (_.isFunction(this.togglingCallback)) {
         this.togglingCallback(true);
       }
-    }, 50);
+    }, 1);
   }
 
   /**
@@ -262,7 +262,7 @@ export default class ConversionToolbar extends Module<ConversionToolbarNodes> {
 
     _.delay(() => {
       this.Editor.Caret.setToBlock(this.Editor.BlockManager.currentBlock);
-    }, 10)();
+    }, 1)();
   }
 
   /**

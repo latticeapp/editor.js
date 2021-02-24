@@ -220,7 +220,7 @@ export default class Toolbar extends Module<ToolbarNodes> {
       } else {
         this.blockActions.hide();
       }
-    }, 50)();
+    }, 1)();
   }
 
   /**

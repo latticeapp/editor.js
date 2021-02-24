@@ -262,7 +262,7 @@ export default class Caret extends Module {
      */
     _.delay(() => {
       this.set(nodeToSet as HTMLElement, offset);
-    }, 20)();
+    }, 1)();
 
     BlockManager.setCurrentBlockByChildNode(block.holder);
     BlockManager.currentBlock.currentInput = element;
@@ -511,7 +511,7 @@ export default class Caret extends Module {
 
       newRange.selectNode(shadowCaret);
       newRange.extractContents();
-    }, 50);
+    }, 1);
   }
 
   /**

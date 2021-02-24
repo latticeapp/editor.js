@@ -275,7 +275,7 @@ export default class BlockSettings extends Module<BlockSettingsNodes> {
          */
         _.delay(() => {
           this.Editor.Caret.setToBlock(this.Editor.BlockManager.currentBlock);
-        }, 50)();
+        }, 1)();
       },
     } as FlipperOptions);
   }

@@ -162,7 +162,7 @@ export default class DomIterator {
       /**
        * Focus input with micro-delay to ensure DOM is updated
        */
-      _.delay(() => SelectionUtils.setCursor(this.items[focusedButtonIndex]), 50)();
+      _.delay(() => SelectionUtils.setCursor(this.items[focusedButtonIndex]), 1)();
     }
 
     /**

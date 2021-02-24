@@ -428,7 +428,7 @@ export default class BlockEvents extends Module {
         if (this.Editor.BlockManager.currentBlock) {
           this.Editor.BlockManager.currentBlock.updateCurrentInput();
         }
-      }, 20)();
+      }, 1)();
     }
 
     /**
