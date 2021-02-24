@@ -202,26 +202,6 @@ export default class CrossBlockSelection extends Module {
       return;
     }
 
-    if (relatedBlock === this.firstSelectedBlock) {
-      SelectionUtils.get().removeAllRanges();
-
-      relatedBlock.selected = true;
-      targetBlock.selected = true;
-
-      BlockSelection.clearCache();
-
-      return;
-    }
-
-    if (targetBlock === this.firstSelectedBlock) {
-      relatedBlock.selected = false;
-      targetBlock.selected = false;
-
-      BlockSelection.clearCache();
-
-      return;
-    }
-
     this.Editor.InlineToolbar.close();
 
     this.toggleBlocksSelectedState(relatedBlock, targetBlock);
@@ -250,11 +230,17 @@ export default class CrossBlockSelection extends Module {
       const block = BlockManager.blocks[i];
 
       if (
-        block !== this.firstSelectedBlock &&
         block !== (shouldntSelectFirstBlock ? firstBlock : lastBlock)
       ) {
-        BlockManager.blocks[i].selected = !BlockManager.blocks[i].selected;
+        const hasEarlierSelection = BlockManager.blocks.slice(0, i).some((b) => b.selected === true);
+        const hasLaterSelection = BlockManager.blocks.slice(i).some((b) => b.selected === true);
+        const sandwiched = hasEarlierSelection && hasLaterSelection;
 
+        if (sandwiched) {
+          BlockManager.blocks[i].selected = true;
+        } else {
+          BlockManager.blocks[i].selected = !BlockManager.blocks[i].selected;
+        }
         BlockSelection.clearCache();
       }
     }
