@@ -352,7 +352,9 @@ export default class Caret extends Module {
       const selectRange = selection.getRangeAt(0);
       const currentBlockInput = this.Editor.BlockManager.currentBlock.currentInput;
 
-      selectRange.deleteContents();
+      if (selectRange) {
+        selectRange.deleteContents();
+      }
 
       if (currentBlockInput) {
         if ($.isNativeInput(currentBlockInput)) {
@@ -536,8 +538,10 @@ export default class Caret extends Module {
 
     const lastChild = fragment.lastChild;
 
-    range.deleteContents();
-    range.insertNode(fragment);
+    if (range) {
+      range.deleteContents();
+      range.insertNode(fragment);
+    }
 
     /** Cross-browser caret insertion */
     const newRange = document.createRange();
