@@ -47,6 +47,14 @@ export default class BlockEvents extends Module {
         this.tabPressed(event);
         break;
     }
+
+    if ((event.keyCode === _.keyCodes.N || event.keyCode === _.keyCodes.F) && event.ctrlKey && // C-n and C-f
+        window.navigator.platform.toLowerCase().includes('mac')) {
+      this.arrowRightAndDown(event);
+    } else if ((event.keyCode === _.keyCodes.P || event.keyCode === _.keyCodes.B) && event.ctrlKey && // C-p and C-b
+               window.navigator.platform.toLowerCase().includes('mac')) {
+      this.arrowLeftAndUp(event);
+    }
   }
 
   /**
@@ -411,7 +419,9 @@ export default class BlockEvents extends Module {
       return;
     }
 
-    const navigateNext = event.keyCode === _.keyCodes.DOWN || (event.keyCode === _.keyCodes.RIGHT && !this.isRtl);
+    const navigateNext = event.keyCode === _.keyCodes.DOWN || (event.keyCode === _.keyCodes.RIGHT && !this.isRtl) ||
+      (event.ctrlKey && event.keyCode === _.keyCodes.F && !this.isRtl && window.navigator.platform.toLowerCase().includes('mac')) ||
+      (event.ctrlKey && event.keyCode === _.keyCodes.N && !this.isRtl && window.navigator.platform.toLowerCase().includes('mac'));
     const isNavigated = navigateNext ? this.Editor.Caret.navigateNext() : this.Editor.Caret.navigatePrevious();
 
     if (isNavigated) {
@@ -469,7 +479,9 @@ export default class BlockEvents extends Module {
       return;
     }
 
-    const navigatePrevious = event.keyCode === _.keyCodes.UP || (event.keyCode === _.keyCodes.LEFT && !this.isRtl);
+    const navigatePrevious = event.keyCode === _.keyCodes.UP || (event.keyCode === _.keyCodes.LEFT && !this.isRtl) ||
+      (event.ctrlKey && event.keyCode === _.keyCodes.P && !this.isRtl && window.navigator.platform.toLowerCase().includes('mac')) ||
+      (event.ctrlKey && event.keyCode === _.keyCodes.B && !this.isRtl && window.navigator.platform.toLowerCase().includes('mac'));
     const isNavigated = navigatePrevious ? this.Editor.Caret.navigatePrevious() : this.Editor.Caret.navigateNext();
 
     if (isNavigated) {
