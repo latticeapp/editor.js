@@ -100,14 +100,5 @@ module.exports = (env, argv) => {
     },
 
     devtool: NODE_ENV === 'development' ? 'source-map' : false,
-
-    optimization: {
-      minimizer: [
-        new TerserPlugin({
-          cache: true,
-          parallel: true,
-        }),
-      ],
-    },
   };
 };
