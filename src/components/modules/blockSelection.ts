@@ -398,6 +398,7 @@ export default class BlockSelection extends Module {
 
     if (inputs.length === 1 && !this.needToSelectAll) {
       this.needToSelectAll = true;
+      this.selectBlockByIndex();
 
       return;
     }
