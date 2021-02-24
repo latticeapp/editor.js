@@ -156,6 +156,16 @@ export default class BlockSettings extends Module<BlockSettingsNodes> {
    * Close Block Settings pane
    */
   public close(): void {
+    /** Do nothing if block settings pane wasn't open.
+     *
+     * Otherwise this could overwrite preexisting selections and cause many other issues,
+     * like selections toggling on and off when they are not expected to, or blocks being
+     * left on screen when they should have been cleared.
+     */
+    if (!this.nodes.wrapper.classList.contains(this.CSS.wrapperOpened)) {
+      return;
+    }
+
     this.nodes.wrapper.classList.remove(this.CSS.wrapperOpened);
 
     /**
