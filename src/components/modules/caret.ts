@@ -437,6 +437,7 @@ export default class Caret extends Module {
         /** If next Tool`s input exists, focus on it. Otherwise set caret to the next Block */
         if (!nextInput) {
           const visuallyAdjacentRange = document.caretRangeFromPoint(selectionRect.x, selectionRect.y + lineHeight + bottomMargin * 2); // TODO: bottomMargin + topMargin or topPadding
+          // TODO: cross-browser caretRangeFromPoint https://gist.github.com/unicornist/ac997a15bc3211ba1235
 
           if (visuallyAdjacentRange) {
             this.setToBlock(nextBlock, this.positions.DEFAULT, visuallyAdjacentRange.startOffset);
