@@ -424,8 +424,8 @@ export default class BlockEvents extends Module {
     const rightKey = (event.keyCode === _.keyCodes.RIGHT && !this.isRtl) ||
       (event.ctrlKey && event.keyCode === _.keyCodes.F && !this.isRtl && window.navigator.platform.toLowerCase().includes('mac'));
     const isNavigated = (downKey || rightKey)
-      ? this.Editor.Caret.navigateNext(!!downKey)
-      : this.Editor.Caret.navigatePrevious(!!downKey);
+      ? this.Editor.Caret.navigateNext(!!downKey, event)
+      : this.Editor.Caret.navigatePrevious(!!downKey, event);
 
     if (isNavigated) {
       /**
@@ -487,8 +487,8 @@ export default class BlockEvents extends Module {
     const leftKey = (event.keyCode === _.keyCodes.LEFT && !this.isRtl) ||
       (event.ctrlKey && event.keyCode === _.keyCodes.B && !this.isRtl && window.navigator.platform.toLowerCase().includes('mac'));
     const isNavigated = (upKey || leftKey)
-      ? this.Editor.Caret.navigatePrevious(!!upKey)
-      : this.Editor.Caret.navigateNext(!!upKey);
+      ? this.Editor.Caret.navigatePrevious(!!upKey, event)
+      : this.Editor.Caret.navigateNext(!!upKey, event);
 
     if (isNavigated) {
       /**

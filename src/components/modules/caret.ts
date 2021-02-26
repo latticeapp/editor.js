@@ -391,9 +391,10 @@ export default class Caret extends Module {
    * Using {@link Dom#getDeepestNode} to get a last node and match with current selection
    *
    * @param {boolean} downKey - whether the navigation was triggered by a "move down" key
+   * @param event - keyboard event for the "move down" key
    * @returns {boolean}
    */
-  public navigateNext(downKey?: boolean): boolean {
+  public navigateNext(downKey?: boolean, event?): boolean {
     const { BlockManager, Tools } = this.Editor;
     const { currentBlock, nextContentfulBlock } = BlockManager;
     const { nextInput } = currentBlock;
@@ -464,9 +465,10 @@ export default class Caret extends Module {
    * Using {@link Dom#getDeepestNode} to get a last node and match with current selection
    *
    * @param {boolean} upKey - whether the navigation was triggered by a "move up" key
+   * @param event - keyboard event for the "move up" key
    * @returns {boolean}
    */
-  public navigatePrevious(upKey?: boolean): boolean {
+  public navigatePrevious(upKey?: boolean, event?): boolean {
     const { currentBlock, previousContentfulBlock } = this.Editor.BlockManager;
 
     if (!currentBlock) {
