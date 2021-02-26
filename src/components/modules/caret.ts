@@ -390,9 +390,10 @@ export default class Caret extends Module {
    * Before moving caret, we should check if caret position is at the end of Plugins node
    * Using {@link Dom#getDeepestNode} to get a last node and match with current selection
    *
+   * @param {boolean} downKey - whether the navigation was triggered by a "move down" key
    * @returns {boolean}
    */
-  public navigateNext(): boolean {
+  public navigateNext(downKey?: boolean): boolean {
     const { BlockManager, Tools } = this.Editor;
     const { currentBlock, nextContentfulBlock } = BlockManager;
     const { nextInput } = currentBlock;
@@ -422,6 +423,27 @@ export default class Caret extends Module {
       nextBlock = BlockManager.insertAtEnd();
     }
 
+    /** Caret position check for down-key */
+    const selection = Selection.get();
+
+    if (downKey && selection?.anchorNode) {
+      const selectionRect = selection.getRangeAt(0).getBoundingClientRect();
+      const paragraph = selection.anchorNode.parentElement;
+      const bottomMargin = paragraph.getBoundingClientRect().bottom - selectionRect.bottom;
+      const lineHeight = parseInt(window.getComputedStyle(selection.anchorNode.parentElement).lineHeight);
+
+      if (bottomMargin < lineHeight) {
+        /** If next Tool`s input exists, focus on it. Otherwise set caret to the next Block */
+        if (!nextInput) {
+          this.setToBlock(nextBlock, this.positions.START);
+        } else {
+          this.setToInput(nextInput, this.positions.START);
+        }
+
+        return true;
+      }
+    }
+
     if (isAtEnd) {
       /** If next Tool`s input exists, focus on it. Otherwise set caret to the next Block */
       if (!nextInput) {
@@ -441,9 +463,10 @@ export default class Caret extends Module {
    * Before moving caret, we should check if caret position is start of the Plugins node
    * Using {@link Dom#getDeepestNode} to get a last node and match with current selection
    *
+   * @param {boolean} upKey - whether the navigation was triggered by a "move up" key
    * @returns {boolean}
    */
-  public navigatePrevious(): boolean {
+  public navigatePrevious(upKey?: boolean): boolean {
     const { currentBlock, previousContentfulBlock } = this.Editor.BlockManager;
 
     if (!currentBlock) {
@@ -454,6 +477,27 @@ export default class Caret extends Module {
 
     if (!previousContentfulBlock && !previousInput) {
       return false;
+    }
+
+    /** If the navigation was triggered by a "move up" key, check vertical position **/
+    const selection = Selection.get();
+
+    if (upKey && selection?.anchorNode) {
+      const selectionRect = selection.getRangeAt(0).getBoundingClientRect();
+      const paragraph = selection.anchorNode.parentElement;
+      const topMargin = selectionRect.top - paragraph.getBoundingClientRect().top;
+      const lineHeight = parseInt(window.getComputedStyle(selection.anchorNode.parentElement).lineHeight);
+
+      if (topMargin < lineHeight) {
+        /** If previous Tool`s input exists, focus on it. Otherwise set caret to the previous Block */
+        if (!previousInput) {
+          this.setToBlock(previousContentfulBlock, this.positions.END);
+        } else {
+          this.setToInput(previousInput, this.positions.END);
+        }
+
+        return true;
+      }
     }
 
     if (this.isAtStart) {

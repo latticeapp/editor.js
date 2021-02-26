@@ -419,10 +419,13 @@ export default class BlockEvents extends Module {
       return;
     }
 
-    const navigateNext = event.keyCode === _.keyCodes.DOWN || (event.keyCode === _.keyCodes.RIGHT && !this.isRtl) ||
-      (event.ctrlKey && event.keyCode === _.keyCodes.F && !this.isRtl && window.navigator.platform.toLowerCase().includes('mac')) ||
+    const downKey = event.keyCode === _.keyCodes.DOWN ||
       (event.ctrlKey && event.keyCode === _.keyCodes.N && !this.isRtl && window.navigator.platform.toLowerCase().includes('mac'));
-    const isNavigated = navigateNext ? this.Editor.Caret.navigateNext() : this.Editor.Caret.navigatePrevious();
+    const rightKey = (event.keyCode === _.keyCodes.RIGHT && !this.isRtl) ||
+      (event.ctrlKey && event.keyCode === _.keyCodes.F && !this.isRtl && window.navigator.platform.toLowerCase().includes('mac'));
+    const isNavigated = (downKey || rightKey)
+      ? this.Editor.Caret.navigateNext(!!downKey)
+      : this.Editor.Caret.navigatePrevious(!!downKey);
 
     if (isNavigated) {
       /**
@@ -479,10 +482,13 @@ export default class BlockEvents extends Module {
       return;
     }
 
-    const navigatePrevious = event.keyCode === _.keyCodes.UP || (event.keyCode === _.keyCodes.LEFT && !this.isRtl) ||
-      (event.ctrlKey && event.keyCode === _.keyCodes.P && !this.isRtl && window.navigator.platform.toLowerCase().includes('mac')) ||
+    const upKey = event.keyCode === _.keyCodes.UP ||
+      (event.ctrlKey && event.keyCode === _.keyCodes.P && !this.isRtl && window.navigator.platform.toLowerCase().includes('mac'));
+    const leftKey = (event.keyCode === _.keyCodes.LEFT && !this.isRtl) ||
       (event.ctrlKey && event.keyCode === _.keyCodes.B && !this.isRtl && window.navigator.platform.toLowerCase().includes('mac'));
-    const isNavigated = navigatePrevious ? this.Editor.Caret.navigatePrevious() : this.Editor.Caret.navigateNext();
+    const isNavigated = (upKey || leftKey)
+      ? this.Editor.Caret.navigatePrevious(!!upKey)
+      : this.Editor.Caret.navigateNext(!!upKey);
 
     if (isNavigated) {
       /**
