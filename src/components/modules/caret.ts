@@ -436,7 +436,13 @@ export default class Caret extends Module {
       if (bottomMargin < lineHeight) {
         /** If next Tool`s input exists, focus on it. Otherwise set caret to the next Block */
         if (!nextInput) {
-          this.setToBlock(nextBlock, this.positions.START);
+          const visuallyAdjacentRange = document.caretRangeFromPoint(selectionRect.x, selectionRect.y + lineHeight + bottomMargin * 2); // TODO: bottomMargin + topMargin or topPadding
+
+          if (visuallyAdjacentRange) {
+            this.setToBlock(nextBlock, this.positions.DEFAULT, visuallyAdjacentRange.startOffset);
+          } else {
+            this.setToBlock(nextBlock, this.positions.START);
+          }
         } else {
           this.setToInput(nextInput, this.positions.START);
         }
@@ -493,7 +499,13 @@ export default class Caret extends Module {
       if (topMargin < lineHeight) {
         /** If previous Tool`s input exists, focus on it. Otherwise set caret to the previous Block */
         if (!previousInput) {
-          this.setToBlock(previousContentfulBlock, this.positions.END);
+          const visuallyAdjacentRange = document.caretRangeFromPoint(selectionRect.x, selectionRect.y - lineHeight - topMargin);
+
+          if (visuallyAdjacentRange) {
+            this.setToBlock(previousContentfulBlock, this.positions.DEFAULT, visuallyAdjacentRange.startOffset);
+          } else {
+            this.setToBlock(previousContentfulBlock, this.positions.END);
+          }
         } else {
           this.setToInput(previousInput, this.positions.END);
         }
