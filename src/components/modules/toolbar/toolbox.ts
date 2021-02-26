@@ -143,7 +143,9 @@ export default class Toolbox extends Module<ToolboxNodes> {
     this.Editor.UI.nodes.wrapper.classList.remove(this.CSS.openedToolbarHolderModifier);
 
     this.opened = false;
-    this.flipper.deactivate();
+    if (this.flipper) {
+      this.flipper.deactivate();
+    }
   }
 
   /**
