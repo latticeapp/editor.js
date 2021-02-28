@@ -39,7 +39,7 @@ export default class Shortcuts extends Module {
    *
    * @type {Shortcut[]}
    */
-  private registeredShortcuts: Shortcut[] = [];
+  public registeredShortcuts: Shortcut[] = [];
 
   /**
    * Register shortcut

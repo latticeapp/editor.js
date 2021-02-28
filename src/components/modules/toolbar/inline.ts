@@ -192,6 +192,8 @@ export default class InlineToolbar extends Module<InlineToolbarNodes> {
       if (_.isFunction(toolInstance.clear)) {
         toolInstance.clear();
       }
+
+      this.Editor.Shortcuts.remove(toolInstance.shortcut);
     });
 
     this.opened = false;
