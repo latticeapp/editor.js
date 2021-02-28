@@ -117,14 +117,6 @@ export default class BlockSelection extends Module {
   private needToSelectAll = false;
 
   /**
-   * Flag used to define native input selection
-   * In this case we allow double CMD+A to select Block
-   *
-   * @type {boolean}
-   */
-  private nativeInputSelected = false;
-
-  /**
    * Flag identifies any input selection
    * That means we can select whole Block
    *
@@ -230,7 +222,6 @@ export default class BlockSelection extends Module {
     const { BlockManager, Caret, RectangleSelection } = this.Editor;
 
     this.needToSelectAll = false;
-    this.nativeInputSelected = false;
     this.readyToBlockSelection = false;
 
     const isKeyboard = reason && (reason instanceof KeyboardEvent);
