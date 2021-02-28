@@ -85,7 +85,7 @@ export default class BlockEvents extends Module {
        *
        * @type {boolean}
        */
-      const isShortcut = event.ctrlKey || event.metaKey || event.altKey || event.shiftKey;
+      const isShortcut = event.ctrlKey || event.metaKey || event.altKey;
 
       if (!isShortcut) {
         this.Editor.BlockManager.clearFocused();
@@ -527,12 +527,10 @@ export default class BlockEvents extends Module {
 
     /**
      * Do not close Toolbar in cases:
-     * 1. ShiftKey pressed (or combination with shiftKey)
-     * 2. When Toolbar is opened and Tab leafs its Tools
-     * 3. When Toolbar's component is opened and some its item selected
+     * 1. When Toolbar is opened and Tab leafs its Tools
+     * 2. When Toolbar's component is opened and some its item selected
      */
-    return !(event.shiftKey ||
-      flippingToolbarItems ||
+    return !(flippingToolbarItems ||
       toolboxItemSelected ||
       blockSettingsItemSelected ||
       inlineToolbarItemSelected ||

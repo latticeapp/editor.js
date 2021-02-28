@@ -413,7 +413,7 @@ export default class UI extends Module<UINodes> {
   private defaultBehaviour(event: KeyboardEvent): void {
     const { currentBlock } = this.Editor.BlockManager;
     const keyDownOnEditor = (event.target as HTMLElement).closest(`.${this.CSS.editorWrapper}`);
-    const isMetaKey = event.altKey || event.ctrlKey || event.metaKey || event.shiftKey;
+    const isMetaKey = event.altKey || event.ctrlKey || event.metaKey;
 
     /**
      * When some block is selected, but the caret is not set inside the editor, treat such keydowns as keydown on selected block.
