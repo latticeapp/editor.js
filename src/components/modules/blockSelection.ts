@@ -401,7 +401,7 @@ export default class BlockSelection extends Module {
       return;
     }
 
-    if (inputs.length === 1 && !this.needToSelectAll) {
+    if (inputs.length === 1 && !this.needToSelectAll && !this.allBlocksSelected) {
       this.needToSelectAll = true;
       this.selectBlockByIndex();
 
@@ -440,7 +440,9 @@ export default class BlockSelection extends Module {
       /**
        * Enable all Blocks selection if current Block is selected
        */
-      this.needToSelectAll = true;
+      if (!this.allBlocksSelected) {
+        this.needToSelectAll = true;
+      }
     }
   }
 
