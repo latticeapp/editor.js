@@ -18,6 +18,14 @@ import { SanitizerConfig } from '../../../types/configs';
  */
 export default class BlockSelection extends Module {
   /**
+   * Flag used to define block selection
+   * First CMD+A defines it as true and then second CMD+A selects all Blocks
+   *
+   * @type {boolean}
+   */
+  public needToSelectAll = false; // TODO: make this private, and provide a public setter for resetting this flag
+
+  /**
    * Sometimes .anyBlockSelected can be called frequently,
    * for example at ui@selectionChange (to clear native browser selection in CBS)
    * We use cache to prevent multiple iterations through all the blocks
@@ -107,14 +115,6 @@ export default class BlockSelection extends Module {
   public get selectedBlocks(): Block[] {
     return this.Editor.BlockManager.blocks.filter((block: Block) => block.selected);
   }
-
-  /**
-   * Flag used to define block selection
-   * First CMD+A defines it as true and then second CMD+A selects all Blocks
-   *
-   * @type {boolean}
-   */
-  private needToSelectAll = false;
 
   /**
    * Flag identifies any input selection
@@ -393,8 +393,8 @@ export default class BlockSelection extends Module {
     }
 
     if (inputs.length === 1 && !this.needToSelectAll && !this.allBlocksSelected) {
-      this.needToSelectAll = true;
       this.selectBlockByIndex();
+      this.needToSelectAll = true;
 
       return;
     }

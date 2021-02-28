@@ -550,6 +550,7 @@ export default class BlockManager extends Module {
    * Remove selection from all Blocks
    */
   public clearFocused(): void {
+    this.Editor.BlockSelection.needToSelectAll = false;
     this.blocks.forEach((block) => {
       block.focused = false;
     });
@@ -673,6 +674,7 @@ export default class BlockManager extends Module {
    */
   public dropPointer(): void {
     this.currentBlockIndex = -1;
+
     this.clearFocused();
   }
 
