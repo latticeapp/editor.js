@@ -704,59 +704,11 @@ export default class Block {
   }
 
   /**
-   * Is fired when text input or contentEditable is clicked
-   *
-   * @param e - Mouse event
-   */
-  private handleClick = (e): void | false => {
-    // TODO: by moving the padding from the contenteditable to its parent, we should be able to eliminate the flash
-    const range = document.caretRangeFromPoint(e.clientX, e.clientY);
-
-    if (!range) {
-      return;
-    }
-
-    if (range.startOffset === 0) {
-      const range2 = document.caretRangeFromPoint(e.clientX, e.clientY + 8); // TODO: fetch padding
-
-      if (range2.startOffset !== range.startOffset) {
-        console.log('clicked in top padding');
-        e.preventDefault(); // TODO: does this preventDefault break anything else?
-        e.stopPropagation();
-        window.getSelection().setPosition(range2.endContainer, range2.startOffset);
-
-        return false;
-      }
-    } else if (range.startOffset === range.endContainer.parentElement.innerText.length) {
-      const range3 = document.caretRangeFromPoint(e.clientX, e.clientY - 8); // TODO: fetch padding
-
-      if (range3.startOffset !== range.startOffset) {
-        console.log('clicked in bottom padding');
-        e.preventDefault(); // TODO: does this preventDefault break anything else?
-        e.stopPropagation();
-        window.getSelection().setPosition(range3.endContainer, range3.startOffset);
-
-        return false;
-      }
-    }
-  }
-
-  private handleDblClick = (e): void | false => {
-    console.log('a');
-    e.preventDefault();
-    e.stopPropagation();
-
-    return false;
-  }
-
-  /**
    * Adds focus event listeners to all inputs and contentEditables
    */
   private addInputEvents(): void {
     this.inputs.forEach(input => {
-      input.addEventListener('focus', this.handleFocus.bind(this));
-      input.addEventListener('click', this.handleClick.bind(this));
-      input.addEventListener('dblclick', this.handleDblClick.bind(this));
+      input.addEventListener('focus', this.handleFocus);
     });
   }
 
@@ -765,9 +717,7 @@ export default class Block {
    */
   private removeInputEvents(): void {
     this.inputs.forEach(input => {
-      input.removeEventListener('focus', this.handleFocus.bind(this));
-      input.removeEventListener('click', this.handleClick.bind(this));
-      input.addEventListener('dblclick', this.handleDblClick.bind(this));
+      input.removeEventListener('focus', this.handleFocus);
     });
   }
 }
