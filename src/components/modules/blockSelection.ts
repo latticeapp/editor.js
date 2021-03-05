@@ -393,7 +393,10 @@ export default class BlockSelection extends Module {
     }
 
     if (inputs.length === 1 && !this.needToSelectAll && !this.allBlocksSelected) {
-      // this.selectBlockByIndex();
+      /** Select the entire block if the block is empty */
+      if (event.target['textContent'] === '') {
+        this.selectBlockByIndex();
+      }
       this.needToSelectAll = true;
 
       return;
