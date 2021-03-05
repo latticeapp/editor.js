@@ -18,7 +18,7 @@ export default class ModificationsObserver extends Module {
    *
    * @type {number}
    */
-  public static readonly DebounceTimer = 450;
+  public static readonly DebounceTimer = 20;
 
   /**
    * MutationObserver instance
