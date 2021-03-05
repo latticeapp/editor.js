@@ -34,6 +34,12 @@ export interface Blocks {
   delete(index?: number): void;
 
   /**
+   * Converts Block to use another tool
+   * @param {string} tool - tool to convert to
+   */
+  convertCurrentBlock(tool: string): Promise<void>;
+
+  /**
    * Swaps two Blocks
    * @param {number} fromIndex - block to swap
    * @param {number} toIndex - block to swap with

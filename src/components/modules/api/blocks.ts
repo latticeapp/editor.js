@@ -17,6 +17,7 @@ export default class BlocksAPI extends Module {
   public get methods(): Blocks {
     return {
       clear: (): void => this.clear(),
+      convertCurrentBlock: (tool: string): Promise<void> => this.convertCurrentBlock(tool),
       render: (data: OutputData): Promise<void> => this.render(data),
       renderFromHTML: (data: string): Promise<void> => this.renderFromHTML(data),
       delete: (index?: number): void => this.delete(index),
@@ -103,6 +104,15 @@ export default class BlocksAPI extends Module {
      * DO not close the settings
      */
     this.Editor.Toolbar.move(false);
+  }
+
+  /**
+   * Converts block to another tool
+   *
+   * @param {string} tool - tool to convert to
+   */
+  public convertCurrentBlock(tool: string): Promise<void> {
+    return this.Editor.ConversionToolbar.replaceWithBlock(tool);
   }
 
   /**
