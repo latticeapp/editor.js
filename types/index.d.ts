@@ -72,12 +72,14 @@ export {
 } from './configs';
 export {OutputData, OutputBlockData} from './data-formats/output-data';
 export { BlockAPI } from './api'
+import { EditorModules } from '../src/types-internal/editor-modules';
 
 /**
  * We have a namespace API {@link ./api/index.d.ts} (APIMethods) but we can not use it as interface
  * So we should create new interface for exporting API type
  */
 export interface API {
+  _Editor: EditorModules;
   blocks: Blocks;
   caret: Caret;
   events: Events;

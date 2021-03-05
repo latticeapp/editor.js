@@ -18,6 +18,7 @@ export default class API extends Module {
    */
   public get methods(): APIInterfaces {
     return {
+      _Editor: this.Editor,
       blocks: this.Editor.BlocksAPI.methods,
       caret: this.Editor.CaretAPI.methods,
       events: this.Editor.EventsAPI.methods,
