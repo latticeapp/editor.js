@@ -104,6 +104,9 @@ module.exports = (env, argv) => {
         },
       ],
     },
+    optimization: {
+        minimize: false
+    },
 
     devtool: NODE_ENV === 'development' ? 'source-map' : false,
   };
