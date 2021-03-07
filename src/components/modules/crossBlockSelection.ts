@@ -205,17 +205,21 @@ export default class CrossBlockSelection extends Module {
     if (relatedBlock === this.firstSelectedBlock) {
       SelectionUtils.get().removeAllRanges();
 
-      relatedBlock.selected = true;
-      targetBlock.selected = true;
+      this.toggleBlocksSelectedState(relatedBlock, targetBlock, true);
 
       BlockSelection.clearCache();
 
       return;
     }
 
+    /**
+     * Ideally we'd maintain the original block as selected when passing over it, but in order
+     * to maintain consistency with the original state when starting a selection, we mark the original
+     * block to unselected when crossing over it.
+     */
     if (targetBlock === this.firstSelectedBlock) {
-      relatedBlock.selected = false;
-      targetBlock.selected = false;
+      this.toggleBlocksSelectedState(relatedBlock, targetBlock, false);
+      this.lastSelectedBlock = targetBlock;
 
       BlockSelection.clearCache();
 
@@ -233,26 +237,44 @@ export default class CrossBlockSelection extends Module {
    *
    * @param {Block} firstBlock - first block in range
    * @param {Block} lastBlock - last block in range
+   * @param {boolean} forceState - whether all blocks in the range should be forced to true/false
    */
-  private toggleBlocksSelectedState(firstBlock: Block, lastBlock: Block): void {
+  private toggleBlocksSelectedState(firstBlock: Block, lastBlock: Block, forceState?: boolean): void {
     const { BlockManager, BlockSelection } = this.Editor;
     const fIndex = BlockManager.blocks.indexOf(firstBlock);
     const lIndex = BlockManager.blocks.indexOf(lastBlock);
 
     /**
-     * If first and last block have the different selection state
+     * If first and last block have the different selection state AND
+     * all blocks in between have the same selected state as the last block,
      * it means we should't toggle selection of the first selected block.
-     * In the other case we shouldn't toggle the last selected block.
+     *
+     * If first and last block have the same selection state we
+     * shouldn't toggle the last selected block.
      */
-    const shouldntSelectFirstBlock = firstBlock.selected !== lastBlock.selected;
+    const mixedSelection = ((): boolean => {
+      for (let i = Math.min(fIndex, lIndex); i <= Math.max(fIndex, lIndex); i++) {
+        if (firstBlock !== BlockManager.blocks[i] && lastBlock !== BlockManager.blocks[i] && lastBlock.selected !== BlockManager.blocks[i].selected) {
+          return true;
+        }
+      }
+
+      return false;
+    })();
+
+    const shouldntSelectFirstBlock = firstBlock.selected !== lastBlock.selected && !mixedSelection;
+    const shouldntSelectLastBlock = firstBlock.selected === lastBlock.selected;
 
     for (let i = Math.min(fIndex, lIndex); i <= Math.max(fIndex, lIndex); i++) {
       const block = BlockManager.blocks[i];
 
-      if (
-        block !== this.firstSelectedBlock &&
-        block !== (shouldntSelectFirstBlock ? firstBlock : lastBlock)
-      ) {
+      if (forceState !== undefined) {
+        BlockManager.blocks[i].selected = forceState;
+
+        BlockSelection.clearCache();
+      } else if (block !== this.firstSelectedBlock &&
+          (!shouldntSelectFirstBlock || block !== firstBlock) &&
+          (!shouldntSelectLastBlock || block !== lastBlock)) {
         BlockManager.blocks[i].selected = !BlockManager.blocks[i].selected;
 
         BlockSelection.clearCache();
