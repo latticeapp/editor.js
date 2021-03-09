@@ -28,6 +28,13 @@ export default class CrossBlockSelection extends Module {
     Listeners.on(document, 'mousedown', (event: MouseEvent) => {
       this.enableCrossBlockSelection(event);
     });
+
+    // prevent interfering with dragNDrop module
+    Listeners.on(document, 'dragstart', (event: DragEvent) => {
+      this.Editor.BlockSelection.clearSelection(event);
+      Listeners.off(document, 'mouseover', this.onMouseOver);
+      Listeners.off(document, 'mouseup', this.onMouseUp);
+    });
   }
 
   /**
