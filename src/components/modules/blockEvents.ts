@@ -42,10 +42,6 @@ export default class BlockEvents extends Module {
       case _.keyCodes.LEFT:
         this.arrowLeftAndUp(event);
         break;
-
-      case _.keyCodes.TAB:
-        this.tabPressed(event);
-        break;
     }
 
     if ((event.keyCode === _.keyCodes.N || event.keyCode === _.keyCodes.F) && event.ctrlKey && // C-n and C-f
@@ -113,38 +109,6 @@ export default class BlockEvents extends Module {
      * Check if editor is empty on each keyup and add special css class to wrapper
      */
     this.Editor.UI.checkEmptiness();
-  }
-
-  /**
-   * Open Toolbox to leaf Tools
-   *
-   * @param {KeyboardEvent} event - tab keydown event
-   */
-  public tabPressed(event): void {
-    /**
-     * Clear blocks selection by tab
-     */
-    this.Editor.BlockSelection.clearSelection(event);
-
-    const { BlockManager, Tools, InlineToolbar, ConversionToolbar } = this.Editor;
-    const currentBlock = BlockManager.currentBlock;
-
-    if (!currentBlock) {
-      return;
-    }
-
-    const canOpenToolbox = Tools.isDefault(currentBlock.tool) && currentBlock.isEmpty;
-    const conversionToolbarOpened = !currentBlock.isEmpty && ConversionToolbar.opened;
-    const inlineToolbarOpened = !currentBlock.isEmpty && !SelectionUtils.isCollapsed && InlineToolbar.opened;
-
-    /**
-     * For empty Blocks we show Plus button via Toolbox only for default Blocks
-     */
-    if (canOpenToolbox) {
-      this.activateToolbox();
-    } else if (!conversionToolbarOpened && !inlineToolbarOpened) {
-      this.activateBlockSettings();
-    }
   }
 
   /**
