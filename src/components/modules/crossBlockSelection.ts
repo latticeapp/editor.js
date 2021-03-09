@@ -72,9 +72,11 @@ export default class CrossBlockSelection extends Module {
    */
   public toggleBlockSelectedState(next = true): void {
     const { BlockManager, BlockSelection } = this.Editor;
+    let isInitialSelection = false;
 
     if (!this.lastSelectedBlock) {
       this.lastSelectedBlock = this.firstSelectedBlock = BlockManager.currentBlock;
+      isInitialSelection = true;
     }
 
     if (this.firstSelectedBlock === this.lastSelectedBlock) {
@@ -82,6 +84,9 @@ export default class CrossBlockSelection extends Module {
 
       BlockSelection.clearCache();
       SelectionUtils.get().removeAllRanges();
+
+      // first cross-block selection via arrow keys should only select currentBlock
+      if (isInitialSelection) return;
     }
 
     const nextBlockIndex = BlockManager.blocks.indexOf(this.lastSelectedBlock) + (next ? 1 : -1);

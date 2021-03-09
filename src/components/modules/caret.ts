@@ -395,28 +395,19 @@ export default class Caret extends Module {
    * @returns {boolean}
    */
   public navigateNext(downKey?: boolean, event?): boolean {
-    const { BlockManager, Tools } = this.Editor;
+    const { BlockManager } = this.Editor;
     const { currentBlock, nextContentfulBlock } = BlockManager;
     const { nextInput } = currentBlock;
     const isAtEnd = this.isAtEnd;
 
     let nextBlock = nextContentfulBlock;
 
-    if (!nextBlock && !nextInput) {
-      /**
-       * This code allows to exit from the last non-initial tool:
-       * https://github.com/codex-team/editor.js/issues/1103
-       */
+    // first extend selection to end of line if holding shift
+    if (!isAtEnd && event.shiftKey) {
+      return false;
+    }
 
-      /**
-       * 1. If there is a last block and it is default, do nothing
-       * 2. If there is a last block and it is non-default --> and caret not at the end <--, do nothing
-       *    (https://github.com/codex-team/editor.js/issues/1414)
-       */
-      if (Tools.isDefault(currentBlock.tool) || !isAtEnd) {
-        return false;
-      }
-
+    if (!nextBlock && !nextInput && isAtEnd) {
       /**
        * If there is no nextBlock, but currentBlock is not default,
        * insert new default block at the end and navigate to it
@@ -477,8 +468,14 @@ export default class Caret extends Module {
    */
   public navigatePrevious(upKey?: boolean, event?): boolean {
     const { currentBlock, previousContentfulBlock } = this.Editor.BlockManager;
+    const isAtStart = this.isAtStart;
 
     if (!currentBlock) {
+      return false;
+    }
+
+    // first extend selection to start of line if holding shift
+    if (!isAtStart && event.shiftKey) {
       return false;
     }
 

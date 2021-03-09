@@ -396,9 +396,13 @@ export default class BlockEvents extends Module {
 
     const shouldEnableCBS = this.Editor.Caret.isAtEnd || this.Editor.BlockSelection.anyBlockSelected;
 
-    if (event.shiftKey && event.keyCode === _.keyCodes.DOWN && shouldEnableCBS) {
-      this.Editor.CrossBlockSelection.toggleBlockSelectedState();
+    if (event.shiftKey && shouldEnableCBS) {
+      // right arrow should not extend selection
+      if (this.Editor.CrossBlockSelection.isCrossBlockSelectionStarted && event.keyCode !== _.keyCodes.DOWN) {
+        return;
+      }
 
+      this.Editor.CrossBlockSelection.toggleBlockSelectedState();
       return;
     }
 
@@ -459,9 +463,13 @@ export default class BlockEvents extends Module {
 
     const shouldEnableCBS = this.Editor.Caret.isAtStart || this.Editor.BlockSelection.anyBlockSelected;
 
-    if (event.shiftKey && event.keyCode === _.keyCodes.UP && shouldEnableCBS) {
-      this.Editor.CrossBlockSelection.toggleBlockSelectedState(false);
+    if (event.shiftKey && shouldEnableCBS) {
+      // left arrow should not extend selection
+      if (this.Editor.CrossBlockSelection.isCrossBlockSelectionStarted && event.keyCode !== _.keyCodes.UP) {
+        return;
+      }
 
+      this.Editor.CrossBlockSelection.toggleBlockSelectedState(false);
       return;
     }
 
