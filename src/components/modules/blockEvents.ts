@@ -26,7 +26,8 @@ export default class BlockEvents extends Module {
      */
     switch (event.keyCode) {
       case _.keyCodes.BACKSPACE:
-        this.backspace(event);
+      case _.keyCodes.DELETE:
+        this.backspaceOrDelete(event);
         break;
 
       case _.keyCodes.ENTER:
@@ -277,26 +278,30 @@ export default class BlockEvents extends Module {
   }
 
   /**
-   * Handle backspace keydown on Block
+   * Handle backspace or delete keydown on Block
    *
    * @param {KeyboardEvent} event - keydown
    */
-  private backspace(event: KeyboardEvent): void {
+  private backspaceOrDelete(event: KeyboardEvent): void {
     const { BlockManager, BlockSelection, Caret } = this.Editor;
     const currentBlock = BlockManager.currentBlock;
     const tool = this.Editor.Tools.available[currentBlock.name];
+    const isDelete = event.keyCode === _.keyCodes.DELETE;
 
     /**
-     * Check if Block should be removed by current Backspace keydown
+     * Check if Block should be removed by current keydown
      */
     if (currentBlock.selected || (currentBlock.isEmpty && currentBlock.currentInput === currentBlock.firstInput)) {
       event.preventDefault();
 
       const index = BlockManager.currentBlockIndex;
 
-      if (BlockManager.previousBlock && BlockManager.previousBlock.inputs.length === 0) {
-        /** If previous block doesn't contain inputs, remove it */
+      if (!isDelete && BlockManager.previousBlock && BlockManager.previousBlock.inputs.length === 0) {
+        /** On Backspace, if previous block doesn't contain inputs, remove it */
         BlockManager.removeBlock(index - 1);
+      } else if (isDelete && BlockManager.nextBlock && BlockManager.nextBlock.inputs.length === 0) {
+        /** On Delete, if next block doesn't contain inputs, remove it */
+        BlockManager.removeBlock(index + 1);
       } else {
         /** If block is empty, just remove it */
         BlockManager.removeBlock();
@@ -326,11 +331,23 @@ export default class BlockEvents extends Module {
       return;
     }
 
-    const isFirstBlock = BlockManager.currentBlockIndex === 0;
-    const canMergeBlocks = Caret.isAtStart &&
-      SelectionUtils.isCollapsed &&
-      currentBlock.currentInput === currentBlock.firstInput &&
-      !isFirstBlock;
+    let canMergeBlocks: boolean;
+
+    if (isDelete) {
+      const isLastBlock = BlockManager.currentBlockIndex === (BlockManager.blocks.length - 1);
+
+      canMergeBlocks = Caret.isAtEnd &&
+        SelectionUtils.isCollapsed &&
+        currentBlock.currentInput === currentBlock.lastInput &&
+        !isLastBlock;
+    } else {
+      const isFirstBlock = BlockManager.currentBlockIndex === 0;
+
+      canMergeBlocks = Caret.isAtStart &&
+        SelectionUtils.isCollapsed &&
+        currentBlock.currentInput === currentBlock.firstInput &&
+        !isFirstBlock;
+    }
 
     if (canMergeBlocks) {
       /**
@@ -341,17 +358,19 @@ export default class BlockEvents extends Module {
       /**
        * Merge Blocks
        */
-      this.mergeBlocks();
+      this.mergeBlocks(isDelete);
     }
   }
 
   /**
    * Merge current and previous Blocks if they have the same type
+   *
+   * @param {boolean} mergeNext Merge current and next blocks instead.
    */
-  private mergeBlocks(): void {
+  private mergeBlocks(mergeNext = false): void {
     const { BlockManager, Caret, Toolbar } = this.Editor;
-    const targetBlock = BlockManager.previousBlock;
-    const blockToMerge = BlockManager.currentBlock;
+    const targetBlock = mergeNext ? BlockManager.currentBlock : BlockManager.previousBlock;
+    const blockToMerge = mergeNext ? BlockManager.nextBlock : BlockManager.currentBlock;
 
     /**
      * Blocks that can be merged:
