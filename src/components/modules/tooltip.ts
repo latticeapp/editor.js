@@ -56,4 +56,8 @@ export default class Tooltip extends Module {
   public onHover(element: HTMLElement, content: TooltipContent, options?: TooltipOptions): void {
     this.lib.onHover(element, content, options);
   }
+
+  public destroy() {
+    this.lib.destroy();
+  }
 }
