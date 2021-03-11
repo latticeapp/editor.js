@@ -119,6 +119,22 @@
     }
   }
 
+  &--tag {
+    .icon--untag {
+      display: none;
+    }
+  }
+
+  &--untag {
+    .icon--tag {
+      display: none;
+    }
+    .icon--untag {
+      display: inline-block;
+      margin-bottom: -1px;
+    }
+  }
+
   &-input {
     outline: none;
     border: 0;

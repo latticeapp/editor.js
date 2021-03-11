@@ -13,6 +13,7 @@ import {
 import BoldInlineTool from '../inline-tools/inline-tool-bold';
 import ItalicInlineTool from '../inline-tools/inline-tool-italic';
 import LinkInlineTool from '../inline-tools/inline-tool-link';
+import TagInlineTool from '../inline-tools/inline-tool-tag';
 import Stub from '../tools/stub';
 
 /**
@@ -389,6 +390,7 @@ export default class Tools extends Module {
       bold: { class: BoldInlineTool },
       italic: { class: ItalicInlineTool },
       link: { class: LinkInlineTool },
+      tag: { class: TagInlineTool },
       paragraph: {
         class: Paragraph,
         inlineToolbar: true,
