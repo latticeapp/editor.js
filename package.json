@@ -15,7 +15,7 @@
     "clear": "rimraf dist && mkdirp dist",
     "build": "yarn clear && yarn svg && yarn build:webpack:prod",
     "build:dev": "yarn clear && yarn svg && yarn build:webpack:dev",
-    "build:webpack:dev": "webpack --mode development --progress --display-error-details --display-entrypoints --watch",
+    "build:webpack:dev": "webpack --mode development --progress",
     "build:webpack:prod": "webpack --mode production",
     "lint": "eslint src/ --ext .ts && yarn lint:tests",
     "lint:errors": "eslint src/ --ext .ts --quiet",
