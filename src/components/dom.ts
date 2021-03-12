@@ -395,7 +395,7 @@ export default class Dom {
       nodeText = node.textContent.replace('\u200B', '');
     }
 
-    return nodeText.trim().length === 0;
+    return nodeText.length === 0;
   }
 
   /**
