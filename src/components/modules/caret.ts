@@ -116,7 +116,7 @@ export default class Caret extends Module {
         /**
          * Workaround SHIFT+ENTER in Safari, that creates <div><br></div> instead of <br>
          */
-        const lineBreakInSafari = node.children.length === 1 && $.isLineBreakTag(node.children[0] as HTMLElement);
+        const lineBreakInSafari = node.children && node.children.length === 1 && $.isLineBreakTag(node.children[0] as HTMLElement);
         const isLineBreak = regularLineBreak || lineBreakInSafari;
 
         return $.isEmpty(node) && !isLineBreak;
